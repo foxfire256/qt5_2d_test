@@ -3,9 +3,11 @@
 #include <QOpenGLFunctions>
 #include <QPainter>
 
-gl_widget::gl_widget(QWidget *parent) : QOpenGLWidget(parent)
-{
+#include "gfx.hpp"
 
+gl_widget::gl_widget(gfx *g, QWidget *parent) : QOpenGLWidget(parent)
+{
+	this->g = g;
 }
 
 void gl_widget::initializeGL()
@@ -25,6 +27,6 @@ void gl_widget::paintEvent(QPaintEvent *event)
 	QPainter painter;
 	painter.begin(this);
 	painter.setRenderHint(QPainter::Antialiasing);
-	//gfx->paint(&painter, event, elapsed);
+	g->paint(&painter, event, 0.0f);
 	painter.end();
 }

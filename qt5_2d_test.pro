@@ -1,8 +1,10 @@
 QT += widgets gui
 
 HEADERS = main_window.hpp \
-	gl_widget.hpp
+	gl_widget.hpp \
+    gfx.hpp
 
 SOURCES = main.cpp \
 	main_window.cpp \
-	gl_widget.cpp
+	gl_widget.cpp \
+    gfx.cpp

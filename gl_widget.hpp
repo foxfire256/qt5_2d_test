@@ -3,10 +3,12 @@
 
 #include <QOpenGLWidget>
 
+class gfx;
+
 class gl_widget : public QOpenGLWidget
 {
 public:
-	gl_widget(QWidget *parent = nullptr);
+	gl_widget(gfx *g, QWidget *parent = nullptr);
 
 public slots:
 	/**
@@ -19,6 +21,9 @@ protected:
 	//void resizeGL(int w, int h) override;
 	//void paintGL() override;
 	void paintEvent(QPaintEvent *event) override;
+
+private:
+	gfx *g;
 };
 
 #endif // GL_WIDGET_HPP

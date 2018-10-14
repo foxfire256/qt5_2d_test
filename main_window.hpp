@@ -4,6 +4,13 @@
 #include <QtWidgets/QMainWindow>
 
 class gl_widget;
+class gfx;
+
+class QVBoxLayout;
+class QHBoxLayout;
+class QGridLayout;
+class QWidget;
+class QTimer;
 
 class main_window : public QMainWindow
 {
@@ -17,6 +24,11 @@ public slots:
 
 private:
 	gl_widget *glw;
+	gfx *g;
+
+	QTimer *gfx_timer;
+	QWidget *main_widget;
+	QHBoxLayout *main_layout;
 };
 
 #endif

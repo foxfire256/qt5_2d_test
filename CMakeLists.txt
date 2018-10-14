@@ -1,15 +1,10 @@
 cmake_minimum_required(VERSION 3.0.0)
-# cmake version 3.0.0 is needed for block comments, 2.8.11 was the previous
-# min version
 project(qt5_2d_test)
-
-# http://www.cmake.org/Wiki/CMake_Useful_Variables
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories("../common-cpp")
 
-# this assumes you are running cmake from a build directory in the source directory
 # cmake .. -G "Visual Studio 15 2017 Win64"
 if(MSVC)
 	ADD_DEFINITIONS(-D_SCL_SECURE_NO_WARNINGS)
@@ -17,10 +12,8 @@ if(MSVC)
 	ADD_DEFINITIONS(-D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS)
 	
 	# /Oi enable intrinsic functions
-	# /GR- disable RTTI, can't do with boost program_options
-	# /std:c++17 or /std:c++14 are options
 	SET(CMAKE_C_FLAGS "/MP ${CMAKE_C_FLAGS}")
-	SET(CMAKE_CXX_FLAGS "/MP /std:c++latest /Oi ${CMAKE_CXX_FLAGS}")
+	SET(CMAKE_CXX_FLAGS "/MP /std:c++17 /Oi ${CMAKE_CXX_FLAGS}")
 	
 	set(QT_DIR "C:\\Qt\\Qt5.11.1\\5.11.1\\msvc2017_64")
 	# %QT_DIR%\bin must be in the PATH for this to work
@@ -114,9 +107,8 @@ set(COMMON_FOX_SOURCE
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-add_executable(${PROJECT_NAME} ${MAIN_SOURCE} qt5_2d_test.qrc)
+add_executable(${PROJECT_NAME} ${MAIN_SOURCE} ${COMMON_FOX_SOURCE} qt5_2d_test.qrc)
 target_link_libraries(${PROJECT_NAME} ${LIBS} ${QT_LIBS} ${BOOST_LIBS})
-#set(CMAKE_AUTOMOC OFF)
 
 get_target_property(QtCore_location Qt5::Core LOCATION)
 MESSAGE( STATUS "QtCore_location: " ${QtCore_location})

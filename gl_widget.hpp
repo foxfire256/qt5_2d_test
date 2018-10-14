@@ -4,11 +4,16 @@
 #include <QOpenGLWidget>
 
 class gfx;
+namespace fox
+{
+class counter;
+}
 
 class gl_widget : public QOpenGLWidget
 {
 public:
 	gl_widget(gfx *g, QWidget *parent = nullptr);
+	virtual ~gl_widget();
 
 public slots:
 	/**
@@ -24,6 +29,7 @@ protected:
 
 private:
 	gfx *g;
+	fox::counter *c;
 };
 
 #endif // GL_WIDGET_HPP

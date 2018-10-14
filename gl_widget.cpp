@@ -4,10 +4,17 @@
 #include <QPainter>
 
 #include "gfx.hpp"
+#include "fox/counter.hpp"
 
 gl_widget::gl_widget(gfx *g, QWidget *parent) : QOpenGLWidget(parent)
 {
 	this->g = g;
+	c = new fox::counter();
+}
+
+gl_widget::~gl_widget()
+{
+	delete c;
 }
 
 void gl_widget::initializeGL()
@@ -27,6 +34,6 @@ void gl_widget::paintEvent(QPaintEvent *event)
 	QPainter painter;
 	painter.begin(this);
 	painter.setRenderHint(QPainter::Antialiasing);
-	g->paint(&painter, event, 0.0f);
+	g->paint(&painter, event, c->update());
 	painter.end();
 }

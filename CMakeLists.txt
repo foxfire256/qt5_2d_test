@@ -15,10 +15,6 @@ if(MSVC)
 	ADD_DEFINITIONS(-D_SCL_SECURE_NO_WARNINGS)
 	ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
 	ADD_DEFINITIONS(-D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS)
-	ADD_DEFINITIONS(-DBOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE)
-	# WARNING: the following do not work with boost program_options
-	#ADD_DEFINITIONS(-DBOOST_NO_RTTI)
-	#ADD_DEFINITIONS(-DBOOST_NO_TYPEID)
 	
 	# /Oi enable intrinsic functions
 	# /GR- disable RTTI, can't do with boost program_options
@@ -38,16 +34,6 @@ if(MSVC)
 	
 	set(LIBS ${LIBS} kernel32.lib)
 	
-	set(BOOST_LIBS ${BOOST_LIBS}
-		optimized "C:\\vclibs\\vclibs\\lib\\libboost_program_options-vc141-mt-x64-1_68.lib"
-		debug "C:\\vclibs\\vclibs\\lib\\libboost_program_options-vc141-mt-gd-x64-1_68.lib")
-	set(BOOST_LIBS ${BOOST_LIBS}
-		optimized "C:\\vclibs\\vclibs\\lib\\libboost_system-vc141-mt-x64-1_68.lib"
-		debug "C:\\vclibs\\vclibs\\lib\\libboost_system-vc141-mt-gd-x64-1_68.lib")
-	set(BOOST_LIBS ${BOOST_LIBS}
-		optimized "C:\\vclibs\\vclibs\\lib\\libboost_filesystem-vc141-mt-x64-1_68.lib"
-		debug "C:\\vclibs\\vclibs\\lib\\libboost_filesystem-vc141-mt-gd-x64-1_68.lib")
-	
 	include_directories("C:\\vclibs\\vclibs\\include")
 	include_directories("C:\\Qt\\Qt5.11.1\\5.11.1\\msvc2017_64\\include")
 endif(MSVC)
@@ -66,10 +52,6 @@ if(MINGW OR MSYS OR UNIX OR APPLE)
 		set(CMAKE_INCLUDE_PATH "c:/msys64/mingw64/include")
 		set(CMAKE_LIBRARY_PATH "c:/msys64/mingw64/lib")
 	endif(APPLE)
-	
-	find_package(Boost COMPONENTS program_options system filesystem REQUIRED)
-	include_directories(${Boost_INCLUDE_DIRS})
-	set(BOOST_LIBS ${Boost_LIBRARIES})
 	
 	if(APPLE)
 		set(LIBS ${LIBS} -L/usr/local/lib)
@@ -98,40 +80,13 @@ if(MINGW OR MSYS OR UNIX OR APPLE)
 		set(QT_LIBS -L/usr/local/opt/qt/lib Qt5::Core Qt5::Widgets Qt5::Gui)
 		include_directories("/usr/local/opt/qt/include")
 		include_directories("/usr/local/include")
-		include_directories("/usr/local/include/eigen3")
 	elseif(UNIX AND NOT APPLE)
 		set(QT_LIBS Qt5::Core Qt5::Widgets Qt5::Gui)
 		include_directories("/usr/include")
-		include_directories("/usr/include/eigen3")
 	elseif(MINGW OR MSYS)
 		set(QT_LIBS -lmingw32 Qt5::Core Qt5::Widgets Qt5::Gui)
-		include_directories("c:/msys64/mingw64/include/eigen3")
 	endif(APPLE)
 	
-	# better optimizations
-	# -O3 still IEEE754 compliant
-	# -Ofast not IEEE754 compliant, faster than -O3
-	# -ffast-math not needed with -Ofast
-	# -ftree-vectorize not sure how well this does
-	# -mavx
-	# -mavx2
-	set(CMAKE_C_FLAGS_RELEASE "-Ofast")
-	set(CMAKE_CXX_FLAGS_RELEASE "-Ofast")
-	
-	# force some better debugging
-	# this should be gcc
-	# WARNING: warnings are disabled
-	if(NOT APPLE)
-		set(CMAKE_C_FLAGS_DEBUG "-ggdb3 -Og")
-		set(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -Og -w")
-	endif(NOT APPLE)
-	# and this should be clang
-	# WARNING: warnings are disabled on clang
-	if(APPLE)
-		set(CMAKE_C_FLAGS_DEBUG "-O0 -g3")
-		set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -w")
-	endif(APPLE)
-
 	# enable C11/C++17 for gcc and clang
 	set(EXTRA_CXX_FLAGS "-std=c++17 -Wno-deprecated-declarations -pipe -frtti")
 	set(EXTRA_C_FLAGS "-std=c17 -Wno-deprecated-declarations -pipe -frtti")
@@ -149,6 +104,8 @@ set(MAIN_SOURCE
 	main_window.cpp
 	gl_widget.hpp
 	gl_widget.cpp
+	gfx.hpp
+	gfx.cpp
 )
 set(COMMON_FOX_SOURCE
 	../common-cpp/fox/counter.hpp
@@ -156,21 +113,11 @@ set(COMMON_FOX_SOURCE
 )
 
 set(CMAKE_AUTOMOC ON)
-add_executable(${PROJECT_NAME} ${MAIN_SOURCE})
+set(CMAKE_AUTORCC ON)
+add_executable(${PROJECT_NAME} ${MAIN_SOURCE} qt5_2d_test.qrc)
 target_link_libraries(${PROJECT_NAME} ${LIBS} ${QT_LIBS} ${BOOST_LIBS})
 #set(CMAKE_AUTOMOC OFF)
 
-MESSAGE( STATUS "MINGW: " ${MINGW} )
-MESSAGE( STATUS "MSYS: " ${MSYS} )
-MESSAGE( STATUS "MSVC: " ${MSVC} )
-MESSAGE( STATUS "APPLE: " ${APPLE} )
-MESSAGE( STATUS "INCLUDE_DIRECTORIES: " ${INCLUDE_DIRECTORIES} )
-MESSAGE( STATUS "CMAKE_C_FLAGS: " ${CMAKE_C_FLAGS} )
-MESSAGE( STATUS "CMAKE_C_FLAGS_DEBUG: " ${CMAKE_C_FLAGS_DEBUG} )
-MESSAGE( STATUS "CMAKE_C_FLAGS_RELEASE: " ${CMAKE_C_FLAGS_RELEASE} )
-MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
-MESSAGE( STATUS "CMAKE_CXX_FLAGS_DEBUG: " ${CMAKE_CXX_FLAGS_DEBUG} )
-MESSAGE( STATUS "CMAKE_CXX_FLAGS_RELEASE: " ${CMAKE_CXX_FLAGS_RELEASE} )
 get_target_property(QtCore_location Qt5::Core LOCATION)
 MESSAGE( STATUS "QtCore_location: " ${QtCore_location})
 get_target_property(QtWdigets_location Qt5::Widgets LOCATION)

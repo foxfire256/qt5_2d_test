@@ -3,6 +3,8 @@
 
 #include <QtWidgets/QMainWindow>
 
+class gl_widget;
+
 class main_window : public QMainWindow
 {
 	Q_OBJECT
@@ -14,6 +16,7 @@ public:
 public slots:
 
 private:
+	gl_widget *glw;
 };
 
 #endif

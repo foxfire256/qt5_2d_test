@@ -30,8 +30,9 @@ if(MSVC)
 	# %QT_DIR%\bin must be in the PATH for this to work
 	find_package(Qt5Core)
 	find_package(Qt5Widgets)
+	find_package(Qt5Gui)
 	
-	set(QT_LIBS Qt5::Core Qt5::Widgets)
+	set(QT_LIBS Qt5::Core Qt5::Widgets Qt5::Gui)
 	
 	set(VC_PREFIX "C:\\vclibs\\vclibs")
 	
@@ -91,18 +92,19 @@ if(MINGW OR MSYS OR UNIX OR APPLE)
 
 	find_package(Qt5Core)
 	find_package(Qt5Widgets)
+	find_package(Qt5Gui)
 	
 	if(APPLE)
-		set(QT_LIBS -L/usr/local/opt/qt/lib Qt5::Core Qt5::Widgets)
+		set(QT_LIBS -L/usr/local/opt/qt/lib Qt5::Core Qt5::Widgets Qt5::Gui)
 		include_directories("/usr/local/opt/qt/include")
 		include_directories("/usr/local/include")
 		include_directories("/usr/local/include/eigen3")
 	elseif(UNIX AND NOT APPLE)
-		set(QT_LIBS Qt5::Core Qt5::Widgets)
+		set(QT_LIBS Qt5::Core Qt5::Widgets Qt5::Gui)
 		include_directories("/usr/include")
 		include_directories("/usr/include/eigen3")
 	elseif(MINGW OR MSYS)
-		set(QT_LIBS -lmingw32 Qt5::Core Qt5::Widgets)
+		set(QT_LIBS -lmingw32 Qt5::Core Qt5::Widgets Qt5::Gui)
 		include_directories("c:/msys64/mingw64/include/eigen3")
 	endif(APPLE)
 	
@@ -145,6 +147,8 @@ set(MAIN_SOURCE
 	main.cpp
 	main_window.hpp
 	main_window.cpp
+	gl_widget.hpp
+	gl_widget.cpp
 )
 set(COMMON_FOX_SOURCE
 	../common-cpp/fox/counter.hpp

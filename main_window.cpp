@@ -24,6 +24,8 @@ main_window::main_window(QWidget *parent) : QMainWindow(parent)
 //------------------------------------------------------------------------------
 main_window::~main_window()
 {
+	delete main_layout;
 	delete glw;
 	delete g;
+	delete main_widget;
 }

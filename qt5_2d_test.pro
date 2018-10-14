@@ -8,3 +8,4 @@ SOURCES = main.cpp \
 	main_window.cpp \
 	gl_widget.cpp \
     gfx.cpp
+

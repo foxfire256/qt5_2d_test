@@ -9,3 +9,5 @@ SOURCES = main.cpp \
 	gl_widget.cpp \
     gfx.cpp
 
+RESOURCES = qt5_2d_test.qrc
+

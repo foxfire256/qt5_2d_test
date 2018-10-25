@@ -5,6 +5,7 @@
 
 class gl_widget;
 class gfx;
+class keyboard_handler;
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -25,6 +26,7 @@ public slots:
 private:
 	gl_widget *glw;
 	gfx *g;
+	keyboard_handler *kh;
 
 	QTimer *gfx_timer;
 	QWidget *main_widget;

@@ -11,13 +11,15 @@ QT += widgets gui 3dcore
 HEADERS = main_window.hpp \
 	gl_widget.hpp \
 	gfx.hpp \
-	../common-cpp/fox/counter.hpp
+	../common-cpp/fox/counter.hpp \
+    keyboard_handler.hpp
 
 SOURCES = main.cpp \
 	main_window.cpp \
 	gl_widget.cpp \
 	gfx.cpp \
-	../common-cpp/fox/counter.cpp
+	../common-cpp/fox/counter.cpp \
+    keyboard_handler.cpp
 
 RESOURCES = qt5_2d_test.qrc
 

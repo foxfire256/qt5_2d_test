@@ -5,6 +5,7 @@
 
 #include "gl_widget.hpp"
 #include "gfx.hpp"
+#include "keyboard_handler.hpp"
 
 //------------------------------------------------------------------------------
 main_window::main_window(QWidget *parent) : QMainWindow(parent)
@@ -29,6 +30,13 @@ main_window::main_window(QWidget *parent) : QMainWindow(parent)
 	// a value of 0 here makes this run all the time when the message queue
 	// is clear
 	gfx_timer->start(1 / 60.0 * 1000); // time in ms
+
+	kh = new keyboard_handler(this);
+
+	// just this seems to be sufficient to grab key presses
+	this->installEventFilter(kh);
+	//main_widget->installEventFilter(kh);
+	//glw->installEventFilter(kh);
 }
 
 //------------------------------------------------------------------------------
@@ -39,3 +47,4 @@ main_window::~main_window()
 	delete g;
 	delete main_widget;
 }
+

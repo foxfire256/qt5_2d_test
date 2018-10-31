@@ -1,6 +1,8 @@
 #include "main_window.hpp"
 
 #include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
 #include <QTimer>
 
 #include "gl_widget.hpp"
@@ -15,13 +17,29 @@ main_window::main_window(QWidget *parent) : QMainWindow(parent)
 
 	int w = 640;
 	int h = 640;
+
+	QSizePolicy right_size_policy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	int right_width = 96;
+
 	main_widget = new QWidget(this);
 
 	g = new gfx(w, h);
 	glw = new gl_widget(g, this);
 
+	quit_pb = new QPushButton("Quit", this);
+	quit_pb->setSizePolicy(right_size_policy);
+	quit_pb->setMaximumWidth(right_width);
+	connect(quit_pb, SIGNAL(pressed()), this, SLOT(do_quit()));
+
 	main_layout = new QHBoxLayout(main_widget);
-	main_layout->addWidget(glw);
+	left_layout = new QVBoxLayout();
+	right_layout = new QVBoxLayout();
+	main_layout->addLayout(left_layout);
+	main_layout->addLayout(right_layout);
+	left_layout->addWidget(glw);
+	right_layout->addStretch();
+	right_layout->addWidget(quit_pb);
+
 	this->setCentralWidget(main_widget);
 	this->resize(w, h);
 
@@ -42,9 +60,20 @@ main_window::main_window(QWidget *parent) : QMainWindow(parent)
 //------------------------------------------------------------------------------
 main_window::~main_window()
 {
+	// order matters with these layouts
+	delete left_layout;
+	delete right_layout;
 	delete main_layout;
+
+	delete quit_pb;
 	delete glw;
 	delete g;
 	delete main_widget;
+}
+
+//------------------------------------------------------------------------------
+void main_window::do_quit()
+{
+	this->close();
 }
 
